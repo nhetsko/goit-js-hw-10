@@ -1,0 +1,46 @@
+body {
+    font-family: "Montserrat";
+}
+.form {
+    max-width: 360px;
+    font-size: 16px;
+    border-radius: 4px;
+}
+
+fieldset {
+display:flex;
+margin-top: 32px;
+gap: 48px;
+border-radius: 4px;
+}
+
+input[type=radio] {
+width: 32px;
+height: 32px;
+border-radius: 4px;
+}
+
+input[type="number"] {
+width: 350px;
+height: 40px;
+margin-top: 8px;
+}
+
+button[type="submit"] {
+width: 360px;
+height: 40px;
+font-size: 16px;
+background: #4E75FF;
+color:white;
+border: none;
+cursor: pointer;
+border-radius: 8px;
+margin-top: 20px;
+}
+
+/* label {
+display: flex;
+flex-direction: row;
+align-items: center;
+gap: 8px;
+} */

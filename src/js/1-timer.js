@@ -3,58 +3,81 @@ import flatpickr from "flatpickr";
 // Додатковий імпорт стилів
 import "flatpickr/dist/flatpickr.min.css";
 
-const input = document.querySelector('#datetime-picker');
-const button = document.querySelector('.button');
-const day = document.querySelector('[data-days]');
-const hour = document.querySelector('[data-hours]');
-const min = document.querySelector('[data-minutes]');
-const sec = document.querySelector('[data-seconds]');
-const spans = document.querySelectorAll('.value');
+import izitoast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
+
+
+const datePickerInput = document.querySelector('input[id="datetime-picker"]');
+const startBtn = document.querySelector('button[data-start]');
+const days = document.querySelector('span[data-days]');
+const hours = document.querySelector('span[data-hours]');
+const minutes = document.querySelector('span[data-minutes]');
+const seconds = document.querySelector('span[data-seconds]');
 
 let userSelectedDate = null;
- 
-    const options = {
-        enableTime: true,
-        time_24hr: true,
-        defaultDate: new Date(),
-        minuteIncrement: 1,
-        onClose(selectedDates) {
-            if (selectedDates[0] < new Date()) {
-                window.alert("Please choose a date in the future");
-                button.disabled = true;
-            }
-            else {
-                button.disabled = false;
-            }    
-        },
-    };
+startBtn.disabled = true;
 
-flatpickr(input, options);
+const fp = flatpickr(datePickerInput);
 
-button.addEventListener('click', onClickedButton);
+const options = {
+  enableTime: true,
+  time_24hr: true,
+  defaultDate: new Date(),
+  minuteIncrement: 1,
+  onClose(selectedDates) {
+    if (selectedDates[0] <= new Date()) {
+      izitoast.error({ position: 'topRight', message: 'Please choose a date in the future',});
+    } else {
+      startBtn.disabled = false;
+    }
+  },
+};
 
-function onClickedButton
+flatpickr(datePickerInput, options);
 
+function convertMs(ms) {
+  const second = 1000;
+  const minute = second * 60;
+  const hour = minute * 60;
+  const day = hour * 24;
 
-// function convertMs(ms) {
-//   // Number of milliseconds per unit of time
-//   const second = 1000;
-//   const minute = second * 60;
-//   const hour = minute * 60;
-//   const day = hour * 24;
+  const days = Math.floor(ms / day);
+  const hours = Math.floor((ms % day) / hour);
+  const minutes = Math.floor(((ms % day) % hour) / minute);
+  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
 
-//   // Remaining days
-//   const days = Math.floor(ms / day);
-//   // Remaining hours
-//   const hours = Math.floor((ms % day) / hour);
-//   // Remaining minutes
-//   const minutes = Math.floor(((ms % day) % hour) / minute);
-//   // Remaining seconds
-//   const seconds = Math.floor((((ms % day) % hour) % minute) / second);
+  return { days, hours, minutes, seconds };
+}
 
-//   return { days, hours, minutes, seconds };
-// }
+startBtn.addEventListener('click', onStart);
 
-// console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
-// console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
-// console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
+function addLeadingZero(value) {
+  return String(value).padStart(2, '0');
+}
+
+function onStart() {
+  startBtn.disabled = true;
+  datePickerInput.disabled = true;
+
+  userSelectedDate = setInterval(() => {
+    let countDown = new Date(datePickerInput.value) - new Date();
+    if (countDown >= 0) {
+      let time = convertMs(countDown);
+
+      days.textContent = addLeadingZero(time.days);
+      hours.textContent = addLeadingZero(time.hours);
+      minutes.textContent = addLeadingZero(time.minutes);
+      seconds.textContent = addLeadingZero(time.seconds);
+    } else {
+      iziToast.show({
+        message: 'CountDown finished',
+        messageColor: '#f44566',
+        messageSize: '18px',
+        backgroundColor: '#ffffff',
+        position: 'topRight',
+        timeout: 2500,
+      });
+      clearInterval(userSelectedDate);
+    }
+  }, 1000);
+}

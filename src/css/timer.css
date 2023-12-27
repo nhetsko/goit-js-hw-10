@@ -1,1 +1,43 @@
+body {
+font-family: "Montserrat";
+}
+
+.timer {
+display: flex;
+}
+
+.field {
+display: flex;
+flex-direction: column;
+align-items: center;
+flex-wrap: wrap;
+padding-right: 24px;
+}
+
+ .value {
+font-size: 40px;
+padding-bottom: 5px;
+ }
+
+.label {
+text-transform: uppercase;
+ }
+ 
+#datetime-picker {
+width: 272px;
+height: 40px;
+font-size: 16px;
+font-family: "Montserrat";
+margin-bottom: 32px;
+margin-right: 8px;
+ }
+
+ button[type="button"] {
+padding: 8px 16px;
+width: 75px;
+font-size: 16px;
+line-height: 24px;
+/* 150% */
+letter-spacing: 0.64px;
+ }
 
