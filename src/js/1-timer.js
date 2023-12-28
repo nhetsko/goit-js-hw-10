@@ -62,10 +62,10 @@ function onStart() {
 
   userSelectedDate = setInterval(() => {
     const currentTime = Date.now();
-    let div = timeDeadline - currentTime;
+    let diff = timeDeadline - currentTime;
 
-    if (div >= 0) {
-      let time = convertMs(div);
+    if (diff >= 0) {
+      let time = convertMs(diff);
 
       days.textContent = addLeadingZero(time.days);
       hours.textContent = addLeadingZero(time.hours);

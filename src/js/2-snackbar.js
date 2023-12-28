@@ -17,6 +17,7 @@ const handleSubmit = (event) => {
         reject(delay);
       }
     }, delay);
+     event.currentTarget.reset();
   });
 
   notificationPromise
@@ -32,10 +33,6 @@ const handleSubmit = (event) => {
         message: `❌ Rejected promise in ${delay}ms`,
       });
     })
-    .finally(() => {
-      // Reset the form after submission
-      event.currentTarget.reset();
-    });
 };
 
 document.querySelector('.form').addEventListener('submit', handleSubmit);
