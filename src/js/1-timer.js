@@ -16,8 +16,7 @@ const seconds = document.querySelector('span[data-seconds]');
 
 let userSelectedDate = null;
 startBtn.disabled = true;
-
-const fp = flatpickr(datePickerInput);
+let timeDeadline = null;
 
 const options = {
   enableTime: true,
@@ -29,6 +28,7 @@ const options = {
       izitoast.error({ position: 'topRight', message: 'Please choose a date in the future',});
     } else {
       startBtn.disabled = false;
+      timeDeadline = selectedDates[0];
     }
   },
 };
@@ -58,24 +58,27 @@ function addLeadingZero(value) {
 function onStart() {
   startBtn.disabled = true;
   datePickerInput.disabled = true;
+  const startTime = Date.now();
 
   userSelectedDate = setInterval(() => {
-    let countDown = new Date(datePickerInput.value) - new Date();
-    if (countDown >= 0) {
-      let time = convertMs(countDown);
+    const currentTime = Date.now();
+    let div = timeDeadline - currentTime;
+
+    if (div >= 0) {
+      let time = convertMs(div);
 
       days.textContent = addLeadingZero(time.days);
       hours.textContent = addLeadingZero(time.hours);
       minutes.textContent = addLeadingZero(time.minutes);
       seconds.textContent = addLeadingZero(time.seconds);
     } else {
-      iziToast.show({
+      izitoast.show({
         message: 'CountDown finished',
         messageColor: '#f44566',
         messageSize: '18px',
         backgroundColor: '#ffffff',
         position: 'topRight',
-        timeout: 2500,
+        timeout: 1000, 
       });
       clearInterval(userSelectedDate);
     }

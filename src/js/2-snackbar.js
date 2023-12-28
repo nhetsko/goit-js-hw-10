@@ -1,3 +1,4 @@
+
 // Import iziToast and its styles
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
@@ -30,6 +31,10 @@ const handleSubmit = (event) => {
         title: "Error",
         message: `❌ Rejected promise in ${delay}ms`,
       });
+    })
+    .finally(() => {
+      // Reset the form after submission
+      event.currentTarget.reset();
     });
 };
 
